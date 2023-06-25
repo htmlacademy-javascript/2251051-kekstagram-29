@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Николай Самарин](https://up.htmlacademy.ru/javascript/29/user/2251051).
-* Наставник: [Василий Петрухин](https://htmlacademy.ru/profile/id1528403).
+* Наставник: [Александр Соболев](https://htmlacademy.ru/profile/sanjoyz).
 
 ---
 
