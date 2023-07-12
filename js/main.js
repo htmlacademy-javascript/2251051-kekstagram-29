@@ -51,14 +51,14 @@ const getRandomId = (min, max) => {
   };
 };
 
-const createRandomIdDescription = getRandomId(1, 25);
+const CREATE_RANDOM_ID_DESCRIPTION = getRandomId(1, 25);
 
-const createRandomIdComment = getRandomId(1, 30);
+const CREATE_RANDOM_ID_COMMENT = getRandomId(1, 30);
 
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
 const createComment = () => ({
-  id: createRandomIdComment(),
+  id: CREATE_RANDOM_ID_COMMENT(),
   avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
   message: getRandomArrayElement(MESSAGE),
   name: getRandomArrayElement(NAMES),
@@ -71,7 +71,7 @@ const createRandomComment = () => {
 
 
 const createDescription = () => ({
-  id: createRandomIdDescription(),
+  id: CREATE_RANDOM_ID_DESCRIPTION(),
   url: `photos/${getRandomInteger(1, 25)}.svg`,
   description: 'Какое-то описание. Сказано придумайте сами... Это типа пофиг какой получается?',
   likes: getRandomInteger(15, 200),
