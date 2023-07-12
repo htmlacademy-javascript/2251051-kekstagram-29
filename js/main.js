@@ -23,6 +23,8 @@ const NAMES = [
 ];
 
 const DESCRIPTIONS_COUNT = 25;
+const MIN_ID = 1;
+const MAX_ID = 25;
 
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -51,14 +53,14 @@ const getRandomId = (min, max) => {
   };
 };
 
-const CREATE_RANDOM_ID_DESCRIPTION = getRandomId(1, 25);
+const createRandomIdDescription = getRandomId(MIN_ID, MAX_ID);
 
-const CREATE_RANDOM_ID_COMMENT = getRandomId(1, 30);
+const createRandomIdComment = getRandomId(MIN_ID, MAX_ID);
 
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
 const createComment = () => ({
-  id: CREATE_RANDOM_ID_COMMENT(),
+  id: createRandomIdComment(),
   avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
   message: getRandomArrayElement(MESSAGE),
   name: getRandomArrayElement(NAMES),
@@ -71,7 +73,7 @@ const createRandomComment = () => {
 
 
 const createDescription = () => ({
-  id: CREATE_RANDOM_ID_DESCRIPTION(),
+  id: createRandomIdDescription(),
   url: `photos/${getRandomInteger(1, 25)}.svg`,
   description: 'Какое-то описание. Сказано придумайте сами... Это типа пофиг какой получается?',
   likes: getRandomInteger(15, 200),
