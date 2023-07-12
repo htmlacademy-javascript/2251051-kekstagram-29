@@ -79,5 +79,3 @@ const createDescription = () => ({
 });
 
 const getRandomDescriptions = Array.from({ length: DESCRIPTIONS_COUNT }, createDescription);
-
-console.log(getRandomDescriptions);
