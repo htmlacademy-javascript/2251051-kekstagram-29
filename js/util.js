@@ -1,0 +1,2 @@
+const getRandomInteger = (a, b) => {
+}
