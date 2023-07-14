@@ -1,4 +1,5 @@
-/* eslint-disable */
+import { getRandomInteger, getRandomId, getRandomArrayElement } from './util.js';
+
 
 const MESSAGE = [
   'Всё отлично!',
@@ -26,38 +27,9 @@ const DESCRIPTIONS_COUNT = 25;
 const MIN_ID = 1;
 const MAX_ID = 25;
 
-const getRandomInteger = (a, b) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-  const result = Math.random() * (upper - lower + 1) + lower;
-
-  return Math.floor(result);
-};
-
-const getRandomId = (min, max) => {
-  const previousValues = [];
-
-  return function () {
-    let currentValue = getRandomInteger(min, max);
-
-    if (previousValues.length >= (max - min + 1)) {
-      return null;
-    }
-
-    while (previousValues.includes(currentValue)) {
-      currentValue = getRandomInteger(min, max);
-    }
-
-    previousValues.push(currentValue);
-    return currentValue;
-  };
-};
-
 const createRandomIdDescription = getRandomId(MIN_ID, MAX_ID);
 
 const createRandomIdComment = getRandomId(MIN_ID, MAX_ID);
-
-const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
 const createComment = () => ({
   id: createRandomIdComment(),
@@ -71,7 +43,6 @@ const createRandomComment = () => {
   return Array.from({ length: randomCommentCount }, createComment);
 };
 
-
 const createDescription = () => ({
   id: createRandomIdDescription(),
   url: `photos/${getRandomInteger(1, 25)}.svg`,
@@ -80,4 +51,6 @@ const createDescription = () => ({
   comment: createRandomComment(),
 });
 
-const getRandomDescriptions = Array.from({ length: DESCRIPTIONS_COUNT }, createDescription);
+const getRandomDescriptions = () => Array.from({ length: DESCRIPTIONS_COUNT }, createDescription);
+
+export { getRandomDescriptions };
