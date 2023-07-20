@@ -33,7 +33,7 @@ const createRandomIdComment = getRandomId(MIN_ID, MAX_ID);
 
 const createComment = () => ({
   id: createRandomIdComment(),
-  avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
+  avatar: `img/avatar-${getRandomInteger(1, 6)}.jpg`,
   message: getRandomArrayElement(MESSAGE),
   name: getRandomArrayElement(NAMES),
 });
