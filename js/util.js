@@ -25,6 +25,8 @@ const getRandomId = (min, max) => {
   };
 };
 
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
-export { getRandomInteger, getRandomId, getRandomArrayElement };
+export {getRandomInteger, getRandomId, getRandomArrayElement, isEscapeKey};
