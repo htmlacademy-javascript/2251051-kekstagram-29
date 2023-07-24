@@ -1,6 +1,5 @@
 import { getRandomInteger, getRandomId, getRandomArrayElement } from './util.js';
 
-
 const MESSAGE = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
@@ -24,33 +23,37 @@ const NAMES = [
 ];
 
 const DESCRIPTIONS_COUNT = 25;
-const MIN_ID = 1;
-const MAX_ID = 25;
 
-const createRandomIdDescription = getRandomId(MIN_ID, MAX_ID);
+// const createRandomIdDescription = getRandomId(1, 25);
 
-const createRandomIdComment = getRandomId(MIN_ID, MAX_ID);
+const createRandomIdComment = getRandomId(1, 1000);
+
+const createRandomPhoto = getRandomId(1, 25);
 
 const createComment = () => ({
   id: createRandomIdComment(),
-  avatar: `img/avatar-${getRandomInteger(1, 6)}.jpg`,
+  avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
   message: getRandomArrayElement(MESSAGE),
   name: getRandomArrayElement(NAMES),
 });
 
 const createRandomComment = () => {
   const randomCommentCount = getRandomInteger(0, 30);
-  return Array.from({ length: randomCommentCount }, createComment);
+  return Array.from({length: randomCommentCount}, createComment);
 };
 
-const createDescription = () => ({
-  id: createRandomIdDescription(),
-  url: `photos/${getRandomInteger(1, 25)}.svg`,
-  description: 'Какое-то описание. Сказано придумайте сами... Это типа пофиг какой получается?',
-  likes: getRandomInteger(15, 200),
-  comment: createRandomComment(),
-});
+const createDescription = () => {
+  const createRandomIdDescription = getRandomId(1, 25);
 
-const getRandomDescriptions = () => Array.from({ length: DESCRIPTIONS_COUNT }, createDescription);
+  return {
+    id: createRandomIdDescription(),
+    url: `photos/${createRandomPhoto()}.jpg`,
+    description: 'Какое-то описание. Сказано придумайте сами... Это типа пофиг какой получается?',
+    likes: getRandomInteger(15, 200),
+    comment: createRandomComment(),
+  };
+};
 
-export { getRandomDescriptions };
+const getRandomDescriptions = () => Array.from({length: DESCRIPTIONS_COUNT}, createDescription);
+
+export {getRandomDescriptions, createRandomComment};
