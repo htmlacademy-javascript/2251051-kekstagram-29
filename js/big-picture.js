@@ -35,4 +35,4 @@ userBigPictureClose.addEventListener('click', () => {
   closeUserModal();
 });
 
-export { userBigPicture, userBigPictureImage, openUserModal, bigPictureLikes, bigPictureCommentsCount, bigPictureComments };
+export { userBigPicture, userBigPictureImage, openUserModal, bigPictureLikes, bigPictureCommentsCount, bigPictureComments, bodySection };
