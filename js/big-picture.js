@@ -1,3 +1,4 @@
+import { onShowMoreClick, showMore } from './miniature-list.js';
 import { isEscapeKey } from './util.js';
 
 const bodySection = document.querySelector('body');
@@ -27,11 +28,8 @@ function closeUserModal() {
   bodySection.classList.remove('modal-open');
 
   document.removeEventListener('keydown', onDocumentKeyDown);
+  showMore.removeEventListener('click, keydown', onShowMoreClick);
 }
-
-// picturesList.addEventListener('click', () => {
-//   openUserModal();
-// });
 
 userBigPictureClose.addEventListener('click', () => {
   closeUserModal();
