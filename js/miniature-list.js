@@ -3,8 +3,13 @@ import { getRandomDescriptions } from './data.js';
 
 const picturesList = document.querySelector('.pictures');
 const picturesTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const showMore = document.querySelector('.comments-loader');
 
 const usersPictures = getRandomDescriptions();
+
+let displayedComments = 5;
+
+let limitedComments = [];
 
 const renderMiniatures = () => {
   const picturesFragment = document.createDocumentFragment();
@@ -36,7 +41,9 @@ const renderMiniatures = () => {
 
         const commentFragment = document.createDocumentFragment();
 
-        comment.forEach(({ avatar, name, message }) => {
+        limitedComments = comment.slice(0, displayedComments);
+
+        limitedComments.forEach(({ avatar, name, message }) => {
           const commentElement = pictureComment.cloneNode(true);
 
           const pictureCommentImage = commentElement.querySelector('.social__picture');
@@ -58,4 +65,11 @@ const renderMiniatures = () => {
   picturesList.appendChild(picturesFragment);
 };
 
+renderMiniatures();
+
 export {renderMiniatures, picturesList};
+
+
+// задокументирую проблему
+// сначала генерируются миниатюры (а следовательно и комментарии)
+// и только потом я пытаюсь обновить displayedComments!!!

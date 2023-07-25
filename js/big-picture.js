@@ -4,6 +4,7 @@ const bodySection = document.querySelector('body');
 const userBigPicture = document.querySelector('.big-picture');
 const bigPictureLikes = userBigPicture.querySelector('.likes-count');
 const bigPictureCommentsCount = userBigPicture.querySelector('.comments-count');
+const commentCountFromTo = userBigPicture.querySelector('.social__comment-count');
 const bigPictureComments = userBigPicture.querySelector('.social__comments');
 const userBigPictureImage = userBigPicture.querySelector('.big-picture__img img');
 const userBigPictureClose = userBigPicture.querySelector('.cancel');
@@ -29,12 +30,8 @@ function closeUserModal() {
   document.removeEventListener('keydown', onDocumentKeyDown);
 }
 
-// picturesList.addEventListener('click', () => {
-//   openUserModal();
-// });
-
 userBigPictureClose.addEventListener('click', () => {
   closeUserModal();
 });
 
-export { userBigPicture, userBigPictureImage, openUserModal, bigPictureLikes, bigPictureCommentsCount, bigPictureComments };
+export { userBigPicture, userBigPictureImage, openUserModal, bigPictureLikes, bigPictureCommentsCount, bigPictureComments, commentCountFromTo };
