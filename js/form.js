@@ -1,4 +1,5 @@
 import { bodySection } from './big-picture.js';
+import { sliderContainer } from './picture-filters.js';
 import { isEscapeKey } from './util.js';
 
 const uploadForm = document.querySelector('.img-upload__form');
@@ -6,91 +7,58 @@ const uploadImage = document.querySelector('.img-upload__input');
 const imageEditField = document.querySelector('.img-upload__overlay');
 const buttonCloseUpload = document.querySelector('.cancel');
 
-const errorUploadWindow = document.querySelector('#error').content.querySelector('.error');
-const successUploadWindow = document.querySelector('#success').content.querySelector('.success');
-
-const successWindow = successUploadWindow.cloneNode(true);
-const errorWindow = errorUploadWindow.cloneNode(true);
-
-const pristine = new Pristine(uploadForm, false);
-
-const onDocumentEscErrorSuccessWindow = (evt) => {
-  if (isEscapeKey) {
-    evt.preventDefault();
-    errorWindow.remove();
-  }
-};
-
-function removeSuccessWindow () {
-  successWindow.remove();
-  imageEditField.classList.add('hidden');
-
-  document.removeEventListener('keydown', onDocumentEscErrorSuccessWindow);
-}
-
-function renderSuccessWindow () {
-  const successButton = successWindow.querySelector('.success__button');
-
-  bodySection.append(successWindow);
-
-  successButton.addEventListener('click', removeSuccessWindow);
-}
-
-function removeErrorWindow () {
-  errorWindow.remove();
-  document.removeEventListener('keydown', onDocumentEscErrorSuccessWindow);
-}
-
-const renderErrorWindow = () => {
-  const errorButton = errorWindow.querySelector('.error__button');
-
-  bodySection.append(errorWindow);
-
-  errorButton.addEventListener('click', removeErrorWindow);
-};
+const MAX_HASHTAG_COUNT = 5;
+const VALID_SYMBOLS = /^#[a-zA-Zа-я0-9]{1,19}$/;
 
 const descriptionField = document.querySelector('.text__description');
 const hashtagField = document.querySelector('.text__hashtags');
 
-function validateDescription (value) {
-  const isTrue = value.trim().length <= 140;
-  return isTrue;
-}
+const pristine = new Pristine(uploadForm, {
+  classTo: 'img-upload__field-wrapper',
+  errorTextParent: 'img-upload__field-wrapper',
+});
 
-function validateHashatg (value) {
-  const hashtags = value.toLowerCase().split(' ');
+const normalizeTags = (tagString) => tagString
+  .trim()
+  .split(' ')
+  .filter((tag) => Boolean(tag.length));
 
-  if (hashtags.length > 5) {
-    return false;
-  }
+const hasValidSymbols = (value) => normalizeTags(value).every((tag) => VALID_SYMBOLS.test(tag));
 
-  const uniqueHashtags = new Set(hashtags);
-  if (uniqueHashtags.size !== hashtags.length) {
-    return false;
-  }
+const hasValidCount = (value) => normalizeTags(value).length <= MAX_HASHTAG_COUNT;
 
-  const regex = /^#[a-zA-Zа-я0-9]{1,19}$/;
-  hashtags.forEach((hashtag) => {
-    if (!regex.test(hashtag)) {
-      return false;
-    }
-  });
+const hasUniqueTags = (value) => {
+  const tagsLower = normalizeTags(value).map((tag) => tag.toLowerCase());
+  return tagsLower.length === new Set(tagsLower).size;
+};
 
-  return true;
-}
+pristine.addValidator(
+  hashtagField,
+  hasValidCount,
+  'Превышено количество хэш-тегов',
+  3,
+  true
+);
 
-pristine.addValidator(descriptionField, validateDescription, 'ошибка');
-pristine.addValidator(hashtagField, validateHashatg);
+pristine.addValidator(
+  hashtagField,
+  hasValidSymbols,
+  'Введён невалидный хэш-тег',
+  2,
+  true
+);
+
+pristine.addValidator(
+  hashtagField,
+  hasUniqueTags,
+  'Хэш-теги повторяются',
+  1,
+  true
+);
 
 uploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  const isValid = pristine.validate();
-
-  if (isValid) {
-    renderSuccessWindow();
-  } else {
-    renderErrorWindow();
-  }
+  pristine.validate();
 });
 
 const onDocumentEsc = (evt) => {
@@ -104,6 +72,7 @@ const onDocumentEsc = (evt) => {
 
 function openImageUpload () {
   imageEditField.classList.remove('hidden');
+  sliderContainer.classList.add('hidden');
   bodySection.classList.add('modal-open');
 
   document.addEventListener('keydown', onDocumentEsc);
@@ -112,6 +81,9 @@ function openImageUpload () {
 function closeImageUpload() {
   imageEditField.classList.add('hidden');
   bodySection.classList.remove('modal-open');
+  pristine.reset();
+  hashtagField.textContent = '';
+  descriptionField.textContent = '';
 
   document.removeEventListener('keydown', onDocumentEsc);
 }

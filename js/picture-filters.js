@@ -42,21 +42,37 @@ addScaleBiggerClick();
 const effectsList = document.querySelector('.effects__list');
 const effectSlider = document.querySelector('.effect-level__slider');
 const effectValue = document.querySelector('.effect-level__value');
+const sliderContainer = document.querySelector('.img-upload__effect-level');
 
 noUiSlider.create(effectSlider, {
   range: {
     min: 0,
     max: 100,
   },
+
   start: 100,
   connect: 'lower',
 });
 
 effectSlider.noUiSlider.on('update', () => {
   effectValue.value = effectSlider.noUiSlider.get();
+
+  if (effectsList.querySelector('#effect-chrome').checked) {
+    imagePreview.style.filter = `grayscale(${effectSlider.noUiSlider.get()})`;
+  } else if (effectsList.querySelector('#effect-sepia').checked) {
+    imagePreview.style.filter = `sepia(${effectSlider.noUiSlider.get()})`;
+  } else if (effectsList.querySelector('#effect-marvin').checked) {
+    imagePreview.style.filter = `invert(${effectSlider.noUiSlider.get()}%)`;
+  } else if (effectsList.querySelector('#effect-phobos').checked) {
+    imagePreview.style.filter = `blur(${effectSlider.noUiSlider.get()}px)`;
+  } else if (effectsList.querySelector('#effect-heat').checked) {
+    imagePreview.style.filter = `brightness(${effectSlider.noUiSlider.get()})`;
+  }
 });
 
 effectsList.addEventListener('change', (evt) => {
+  sliderContainer.classList.remove('hidden');
+
   if (evt.target.id === 'effect-chrome') {
     effectSlider.noUiSlider.updateOptions({
       range: {
@@ -67,8 +83,6 @@ effectsList.addEventListener('change', (evt) => {
       start: 1,
       step: 0.1,
     });
-
-    imagePreview.style.filter = `grayscale(${effectSlider.noUiSlider.get()})`;
 
   } else if (evt.target.id === 'effect-sepia') {
 
@@ -82,7 +96,6 @@ effectsList.addEventListener('change', (evt) => {
       step: 0.1,
     });
 
-    imagePreview.style.filter = `sepia(${effectSlider.noUiSlider.get()})`;
   } else if (evt.target.id === 'effect-marvin') {
 
     effectSlider.noUiSlider.updateOptions({
@@ -94,8 +107,6 @@ effectsList.addEventListener('change', (evt) => {
       start: 100,
       step: 1,
     });
-
-    imagePreview.style.filter = `invert(${effectSlider.noUiSlider.get()}%)`;
 
   } else if (evt.target.id === 'effect-phobos') {
 
@@ -109,7 +120,6 @@ effectsList.addEventListener('change', (evt) => {
       step: 0.1,
     });
 
-    imagePreview.style.filter = `blur(${effectSlider.noUiSlider.get()}px)`;
   } else if (evt.target.id === 'effect-heat') {
 
     effectSlider.noUiSlider.updateOptions({
@@ -122,9 +132,13 @@ effectsList.addEventListener('change', (evt) => {
       step: 0.1,
     });
 
-    imagePreview.style.filter = `brightness(${effectSlider.noUiSlider.get()})`;
+  } else if (evt.target.id === 'effect-none') {
+    imagePreview.style.filter = 'initial';
+    sliderContainer.classList.add('hidden');
   }
 });
+
+export { sliderContainer };
 
 // По умолчанию должен быть выбран эффект «Оригинал».
 // На изображение может накладываться только один эффект.
