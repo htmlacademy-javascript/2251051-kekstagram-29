@@ -43,8 +43,6 @@ const effectsList = document.querySelector('.effects__list');
 const effectSlider = document.querySelector('.effect-level__slider');
 const effectValue = document.querySelector('.effect-level__value');
 
-effectValue.value = 100;
-
 noUiSlider.create(effectSlider, {
   range: {
     min: 0,
@@ -60,52 +58,71 @@ effectSlider.noUiSlider.on('update', () => {
 
 effectsList.addEventListener('change', (evt) => {
   if (evt.target.id === 'effect-chrome') {
-    imagePreview.style.filter = `grayscale(${effectValue.value}%)`;
-
     effectSlider.noUiSlider.updateOptions({
       range: {
         min: 0,
         max: 1,
       },
 
+      start: 1,
       step: 0.1,
     });
+
+    imagePreview.style.filter = `grayscale(${effectSlider.noUiSlider.get()})`;
+
   } else if (evt.target.id === 'effect-sepia') {
+
     effectSlider.noUiSlider.updateOptions({
       range: {
         min: 0,
         max: 1,
       },
 
+      start: 1,
       step: 0.1,
     });
+
+    imagePreview.style.filter = `sepia(${effectSlider.noUiSlider.get()})`;
   } else if (evt.target.id === 'effect-marvin') {
+
     effectSlider.noUiSlider.updateOptions({
       range: {
         min: 0,
         max: 100,
       },
 
+      start: 100,
       step: 1,
     });
+
+    imagePreview.style.filter = `invert(${effectSlider.noUiSlider.get()}%)`;
+
   } else if (evt.target.id === 'effect-phobos') {
+
     effectSlider.noUiSlider.updateOptions({
       range: {
-        min: 1,
+        min: 0,
         max: 3,
       },
 
+      start: 3,
       step: 0.1,
     });
+
+    imagePreview.style.filter = `blur(${effectSlider.noUiSlider.get()}px)`;
   } else if (evt.target.id === 'effect-heat') {
+
     effectSlider.noUiSlider.updateOptions({
       range: {
         min: 1,
         max: 3,
       },
 
+      start: 3,
       step: 0.1,
     });
+
+    imagePreview.style.filter = `brightness(${effectSlider.noUiSlider.get()})`;
   }
 });
 
