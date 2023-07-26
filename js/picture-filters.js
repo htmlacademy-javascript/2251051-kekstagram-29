@@ -1,3 +1,5 @@
+// Масштабирование картинки
+
 const scale = document.querySelector('.scale');
 const imagePreview = document.querySelector('.img-upload__preview img');
 const scaleSmaller = scale.querySelector('.scale__control--smaller');
@@ -35,9 +37,89 @@ const addScaleBiggerClick = () => {
 addScaleSmallerClick();
 addScaleBiggerClick();
 
-// Значение должно изменяться с шагом в 25.
-// Например, если значение поля установлено в 50%, после нажатия на «+», значение должно стать равным 75%.
-// Максимальное значение — 100%, минимальное — 25%. Значение по умолчанию — 100%;
+// Фильтры
 
-// При изменении значения поля .scale__control--value изображению внутри .img-upload__preview должен добавляться соответствующий стиль CSS;
-// который с помощью трансформации scale задаёт масштаб. Например, если в поле стоит значение 75%, то в стиле изображения должно быть написано transform: scale(0.75);
+const effectsList = document.querySelector('.effects__list');
+const effectSlider = document.querySelector('.effect-level__slider');
+const effectValue = document.querySelector('.effect-level__value');
+
+effectValue.value = 100;
+
+noUiSlider.create(effectSlider, {
+  range: {
+    min: 0,
+    max: 100,
+  },
+  start: 100,
+  connect: 'lower',
+});
+
+effectSlider.noUiSlider.on('update', () => {
+  effectValue.value = effectSlider.noUiSlider.get();
+});
+
+effectsList.addEventListener('change', (evt) => {
+  if (evt.target.id === 'effect-chrome') {
+    imagePreview.style.filter = `grayscale(${effectValue.value}%)`;
+
+    effectSlider.noUiSlider.updateOptions({
+      range: {
+        min: 0,
+        max: 1,
+      },
+
+      step: 0.1,
+    });
+  } else if (evt.target.id === 'effect-sepia') {
+    effectSlider.noUiSlider.updateOptions({
+      range: {
+        min: 0,
+        max: 1,
+      },
+
+      step: 0.1,
+    });
+  } else if (evt.target.id === 'effect-marvin') {
+    effectSlider.noUiSlider.updateOptions({
+      range: {
+        min: 0,
+        max: 100,
+      },
+
+      step: 1,
+    });
+  } else if (evt.target.id === 'effect-phobos') {
+    effectSlider.noUiSlider.updateOptions({
+      range: {
+        min: 1,
+        max: 3,
+      },
+
+      step: 0.1,
+    });
+  } else if (evt.target.id === 'effect-heat') {
+    effectSlider.noUiSlider.updateOptions({
+      range: {
+        min: 1,
+        max: 3,
+      },
+
+      step: 0.1,
+    });
+  }
+});
+
+// По умолчанию должен быть выбран эффект «Оригинал».
+// На изображение может накладываться только один эффект.
+// Интенсивность эффекта регулируется перемещением ползунка в слайдере.
+// Слайдер реализуется сторонней библиотекой для реализации слайдеров noUiSlider.
+// Уровень эффекта записывается в поле .effect-level__value.
+// При изменении уровня интенсивности эффекта (предоставляется API слайдера), CSS-стили картинки внутри .img-upload__preview обновляются следующим образом:
+// Для эффекта «Хром» — filter: grayscale(0..1) с шагом 0.1;
+// Для эффекта «Сепия» — filter: sepia(0..1) с шагом 0.1;
+// Для эффекта «Марвин» — filter: invert(0..100%) с шагом 1%;
+// Для эффекта «Фобос» — filter: blur(0..3px) с шагом 0.1px;
+// Для эффекта «Зной» — filter: brightness(1..3) с шагом 0.1;
+// Для эффекта «Оригинал» CSS-стили filter удаляются.
+// При выборе эффекта «Оригинал» слайдер и его контейнер (элемент .img-upload__effect-level) скрываются.
+// При переключении эффектов, уровень насыщенности сбрасывается до начального значения (100%): слайдер, CSS-стиль изображения и значение поля должны обновляться.
