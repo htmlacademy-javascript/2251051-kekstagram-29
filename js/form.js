@@ -6,6 +6,7 @@ const uploadForm = document.querySelector('.img-upload__form');
 const uploadImage = document.querySelector('.img-upload__input');
 const imageEditField = document.querySelector('.img-upload__overlay');
 const buttonCloseUpload = document.querySelector('.cancel');
+const submitButton = document.querySelector('.img-upload__submit');
 
 const MAX_HASHTAG_COUNT = 5;
 const VALID_SYMBOLS = /^#[a-zA-Zа-я0-9]{1,19}$/;
@@ -56,10 +57,23 @@ pristine.addValidator(
   true
 );
 
-uploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
+const toggleSubmitButton = (isDisabled) => {
+  submitButton.disabled = isDisabled;
+  submitButton.textContent = isDisabled ? 'Загружается...' : 'Опубликовать';
+};
+
+const setUserFormSubmit = (callback) => {
+  uploadForm.addEventListener('submit', async (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+
+    if (isValid) {
+      toggleSubmitButton(true);
+      await callback(new FormData(uploadForm));
+      toggleSubmitButton();
+    }
+  });
+};
 
 const onDocumentEsc = (evt) => {
   const nonClosingElements = [descriptionField, hashtagField];
@@ -89,10 +103,12 @@ function closeImageUpload() {
 }
 
 uploadImage.addEventListener('change', () => {
-  uploadImage.value = '';
   openImageUpload();
 });
 
 buttonCloseUpload.addEventListener('click', () => {
   closeImageUpload();
+  uploadImage.value = '';
 });
+
+export {setUserFormSubmit, closeImageUpload};
