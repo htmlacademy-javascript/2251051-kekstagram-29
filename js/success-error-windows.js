@@ -1,41 +1,56 @@
 import { bodySection } from './big-picture.js';
+import { closeImageUpload } from './form.js';
+import { isEscapeKey } from './util.js';
 
 const successWindowTemplate = document.querySelector('#success').content.querySelector('.success');
 const errorWindowTemplate = document.querySelector('#error').content.querySelector('.error');
 
-function closeWindow(window, closeButtonClass, eventListener) {
-  const closeButton = window.querySelector(closeButtonClass);
-  closeButton.removeEventListener('click', eventListener);
-  window.remove();
+const successWindow = successWindowTemplate.cloneNode(true);
+const errorWindow = errorWindowTemplate.cloneNode(true);
+
+function createSuccessWindow() {
+  bodySection.append(successWindow);
 }
 
-function renderWindow(window, closeButtonClass, eventListener) {
-  const closeButton = window.querySelector(closeButtonClass);
-  closeButton.addEventListener('click', () => {
-    closeWindow(window, closeButtonClass, eventListener);
-  });
+const closeError = () => {
+  errorWindow.remove();
+};
 
-  bodySection.append(window);
+const closeSuccess = () => {
+  successWindow.remove();
+  closeImageUpload();
+};
+
+function createErrorWindow() {
+  bodySection.append(errorWindow);
 }
 
-function renderSuccessWindow() {
-  const successWindow = successWindowTemplate.cloneNode(true);
-  const closeSuccessButtonClass = '.success__button';
-  const closeSuccessWindow = () => {
-    closeWindow(successWindow, closeSuccessButtonClass, closeSuccessWindow);
-  };
+const onDocumentKeyDownRemoveSucces = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    successWindow.remove();
+  }
+};
 
-  renderWindow(successWindow, closeSuccessButtonClass, closeSuccessWindow);
+const onDocumentKeyDownRemoveError = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    errorWindow.remove();
+  }
+};
+
+function renderSuccessWindow () {
+  createSuccessWindow();
+  const closeErrorButton = successWindow.querySelector('.success__button');
+  closeErrorButton.addEventListener('click', closeSuccess);
+  document.addEventListener('keydown', onDocumentKeyDownRemoveSucces);
 }
 
-function renderErrorWindow() {
-  const errorWindow = errorWindowTemplate.cloneNode(true);
-  const closeErrorButtonClass = '.error__button';
-  const closeErrorWindow = () => {
-    closeWindow(errorWindow, closeErrorButtonClass, closeErrorWindow);
-  };
-
-  renderWindow(errorWindow, closeErrorButtonClass, closeErrorWindow);
+function renderErrorWindow () {
+  createErrorWindow();
+  const closeErrorButton = successWindow.querySelector('.error__button');
+  closeErrorButton.addEventListener('click', closeError);
+  document.addEventListener('keydown', onDocumentKeyDownRemoveError);
 }
 
 export {renderSuccessWindow, renderErrorWindow};

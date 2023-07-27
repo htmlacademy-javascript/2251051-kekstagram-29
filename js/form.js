@@ -1,12 +1,12 @@
 import { bodySection } from './big-picture.js';
 import { sliderContainer } from './picture-filters.js';
-import { renderErrorWindow, renderSuccessWindow } from './success-error-windows.js';
 import { isEscapeKey } from './util.js';
 
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadImage = document.querySelector('.img-upload__input');
 const imageEditField = document.querySelector('.img-upload__overlay');
 const buttonCloseUpload = document.querySelector('.cancel');
+const submitButton = document.querySelector('.img-upload__submit');
 
 const MAX_HASHTAG_COUNT = 5;
 const VALID_SYMBOLS = /^#[a-zA-Zа-я0-9]{1,19}$/;
@@ -57,31 +57,20 @@ pristine.addValidator(
   true
 );
 
-const setUserFormSubmit = () => {
-  uploadForm.addEventListener('submit', (evt) => {
+const toggleSubmitButton = (isDisabled) => {
+  submitButton.disabled = isDisabled;
+  submitButton.textContent = isDisabled ? 'Загружается...' : 'Опубликовать';
+};
+
+const setUserFormSubmit = (callback) => {
+  uploadForm.addEventListener('submit', async (evt) => {
     evt.preventDefault();
     const isValid = pristine.validate();
 
     if (isValid) {
-      const formData = new FormData(evt.target);
-
-      fetch(
-        'https://29.javascript.pages.academy/kekstagram',
-        {
-          method: 'POST',
-          body: formData,
-        },
-      )
-        .then((response) => {
-          if (response.ok) {
-            renderSuccessWindow();
-          } else {
-            renderErrorWindow();
-          }
-        })
-        .catch(() => {
-          renderErrorWindow();
-        });
+      toggleSubmitButton(true);
+      await callback(new FormData(uploadForm));
+      toggleSubmitButton();
     }
   });
 };
@@ -114,12 +103,12 @@ function closeImageUpload() {
 }
 
 uploadImage.addEventListener('change', () => {
-  uploadImage.value = '';
   openImageUpload();
 });
 
 buttonCloseUpload.addEventListener('click', () => {
   closeImageUpload();
+  uploadImage.value = '';
 });
 
-export {setUserFormSubmit};
+export {setUserFormSubmit, closeImageUpload};
