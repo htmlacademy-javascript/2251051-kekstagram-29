@@ -1,13 +1,11 @@
 import { userBigPicture, bigPictureComments, bigPictureCommentsCount, bigPictureLikes, openUserModal, userBigPictureImage } from './big-picture.js';
-import { getRandomDescriptions } from './data.js';
 
 const picturesList = document.querySelector('.pictures');
 const picturesTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const showMore = document.querySelector('.comments-loader');
 const pictureComment = bigPictureComments.querySelector('.social__comment');
 const commentCountFromTo = userBigPicture.querySelector('.social__comment-count');
-
-const usersPictures = getRandomDescriptions();
+const imageDescription = userBigPicture.querySelector('.social__caption');
 
 let limitedComments = [];
 
@@ -44,10 +42,10 @@ const renderComments = () => {
   }
 };
 
-const renderMiniatures = () => {
+const renderMiniatures = (usersPictures) => {
   const picturesFragment = document.createDocumentFragment();
 
-  usersPictures.forEach(({ url, description, likes, comment }) => {
+  usersPictures.forEach(({ url, description, likes, comments }) => {
     const picturesElement = picturesTemplate.cloneNode(true);
     const pictureImage = picturesElement.querySelector('.picture__img');
     const picturesLikes = picturesElement.querySelector('.picture__likes');
@@ -56,7 +54,7 @@ const renderMiniatures = () => {
     pictureImage.src = url;
     pictureImage.alt = description;
     picturesLikes.textContent = likes;
-    pictureComments.textContent = comment.length;
+    pictureComments.textContent = comments.length;
 
     picturesList.appendChild(picturesElement);
 
@@ -71,13 +69,15 @@ const renderMiniatures = () => {
         bigPictureLikes.textContent = picturesLikes.textContent;
         bigPictureCommentsCount.textContent = pictureComments.textContent;
 
-        currentPictureComments = comment;
+        currentPictureComments = comments;
         if (currentPictureComments.length <= 5) {
           displayedComments = currentPictureComments.length;
         } else {
           displayedComments = 5;
         }
         renderComments();
+
+        imageDescription.textContent = description;
       }
 
       picturesElement.removeEventListener('click', onMiniatureClick);
@@ -100,7 +100,5 @@ const onShowMoreClick = () => {
 };
 
 showMore.addEventListener('click', onShowMoreClick);
-
-renderMiniatures();
 
 export {renderMiniatures, picturesList, onShowMoreClick, showMore};
