@@ -1,5 +1,6 @@
 import { bodySection } from './big-picture.js';
 import { sliderContainer } from './picture-filters.js';
+import { renderErrorWindow, renderSuccessWindow } from './success-error-windows.js';
 import { isEscapeKey } from './util.js';
 
 const uploadForm = document.querySelector('.img-upload__form');
@@ -56,10 +57,34 @@ pristine.addValidator(
   true
 );
 
-uploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
+const setUserFormSubmit = () => {
+  uploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValid = pristine.validate();
+
+    if (isValid) {
+      const formData = new FormData(evt.target);
+
+      fetch(
+        'https://29.javascript.pages.academy/kekstagram',
+        {
+          method: 'POST',
+          body: formData,
+        },
+      )
+        .then((response) => {
+          if (response.ok) {
+            renderSuccessWindow();
+          } else {
+            renderErrorWindow();
+          }
+        })
+        .catch(() => {
+          renderErrorWindow();
+        });
+    }
+  });
+};
 
 const onDocumentEsc = (evt) => {
   const nonClosingElements = [descriptionField, hashtagField];
@@ -96,3 +121,5 @@ uploadImage.addEventListener('change', () => {
 buttonCloseUpload.addEventListener('click', () => {
   closeImageUpload();
 });
+
+export {setUserFormSubmit};
