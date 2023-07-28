@@ -1,5 +1,5 @@
 import { bodySection } from './big-picture.js';
-import { sliderContainer } from './picture-filters.js';
+import { imagePreview, sliderContainer } from './picture-filters.js';
 import { isEscapeKey } from './util.js';
 
 const uploadForm = document.querySelector('.img-upload__form');
@@ -13,6 +13,8 @@ const VALID_SYMBOLS = /^#[a-zA-Zа-я0-9]{1,19}$/;
 
 const descriptionField = document.querySelector('.text__description');
 const hashtagField = document.querySelector('.text__hashtags');
+
+const FILE_TYPES = ['jpg', 'jpeg', 'png'];
 
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -104,6 +106,15 @@ function closeImageUpload() {
 
 uploadImage.addEventListener('change', () => {
   openImageUpload();
+
+  const file = uploadImage.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matches) {
+    imagePreview.src = URL.createObjectURL(file);
+  }
 });
 
 buttonCloseUpload.addEventListener('click', () => {
