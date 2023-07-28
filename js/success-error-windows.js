@@ -14,6 +14,7 @@ function createSuccessWindow() {
 
 const closeError = () => {
   errorWindow.remove();
+  closeImageUpload();
 };
 
 const closeSuccess = () => {
@@ -41,14 +42,14 @@ const onDocumentKeyDownRemoveError = (evt) => {
 
 function renderSuccessWindow () {
   createSuccessWindow();
-  const closeErrorButton = successWindow.querySelector('.success__button');
-  closeErrorButton.addEventListener('click', closeSuccess);
+  const closeSuccessButton = successWindow.querySelector('.success__button');
+  closeSuccessButton.addEventListener('click', closeSuccess);
   document.addEventListener('keydown', onDocumentKeyDownRemoveSucces);
 }
 
 function renderErrorWindow () {
   createErrorWindow();
-  const closeErrorButton = successWindow.querySelector('.error__button');
+  const closeErrorButton = errorWindow.querySelector('.error__button');
   closeErrorButton.addEventListener('click', closeError);
   document.addEventListener('keydown', onDocumentKeyDownRemoveError);
 }

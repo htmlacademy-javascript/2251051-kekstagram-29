@@ -8,6 +8,7 @@ import './miniature-list.js';
 import './form.js';
 import './picture-filters.js';
 import './api.js';
+import './filter-images.js';
 import { setUserFormSubmit } from './form.js';
 import { closeUserModal } from './big-picture.js';
 import { renderErrorWindow, renderSuccessWindow } from './success-error-windows.js';

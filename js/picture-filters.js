@@ -138,7 +138,7 @@ effectsList.addEventListener('change', (evt) => {
   }
 });
 
-export { sliderContainer };
+export { sliderContainer, imagePreview };
 
 // По умолчанию должен быть выбран эффект «Оригинал».
 // На изображение может накладываться только один эффект.
