@@ -14,7 +14,8 @@ import { closeUserModal } from './big-picture.js';
 import { renderErrorWindow, renderSuccessWindow } from './success-error-windows.js';
 import { getData, sendData } from './api.js';
 import { renderMiniatures } from './miniature-list.js';
-import { showAlert } from './util.js';
+import { debounce, showAlert } from './util.js';
+import { getFilteredMiniatures, initFilter } from './filter-images.js';
 
 setUserFormSubmit(async (data) => {
   try {
@@ -28,7 +29,9 @@ setUserFormSubmit(async (data) => {
 
 try {
   const data = await getData();
-  renderMiniatures(data);
+  const debouncedGallery = debounce(renderMiniatures);
+  initFilter(data, debouncedGallery);
+  renderMiniatures(getFilteredMiniatures());
 } catch (err) {
   showAlert(err.message);
 }

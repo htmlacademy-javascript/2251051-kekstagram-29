@@ -6,7 +6,7 @@ const showMore = document.querySelector('.comments-loader');
 const pictureComment = bigPictureComments.querySelector('.social__comment');
 const commentCountFromTo = userBigPicture.querySelector('.social__comment-count');
 const imageDescription = userBigPicture.querySelector('.social__caption');
-const imagesFiltersShown = document.querySelector('.img-filters');
+const container = document.querySelector('.pictures');
 
 let limitedComments = [];
 
@@ -45,9 +45,9 @@ const renderComments = () => {
 
 const renderMiniatures = (usersPictures) => {
   const picturesFragment = document.createDocumentFragment();
-  imagesFiltersShown.classList.remove('img-filters--inactive');
+  container.querySelectorAll('.picture').forEach((element) => element.remove());
 
-  usersPictures.forEach(({ url, description, likes, comments }) => {
+  usersPictures.slice().forEach(({ url, description, likes, comments }) => {
     const picturesElement = picturesTemplate.cloneNode(true);
     const pictureImage = picturesElement.querySelector('.picture__img');
     const picturesLikes = picturesElement.querySelector('.picture__likes');
@@ -57,6 +57,7 @@ const renderMiniatures = (usersPictures) => {
     pictureImage.alt = description;
     picturesLikes.textContent = likes;
     pictureComments.textContent = comments.length;
+
 
     picturesList.appendChild(picturesElement);
 

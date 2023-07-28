@@ -1,21 +1,57 @@
-const filtersImageContainer = document.querySelector('.img-filters__form');
-const buttonCollection = document.querySelectorAll('.img-filters__button');
-const defaultFilterButton = document.querySelector('#filter-default');
-const randomFilterButton = document.querySelector('#filter-random');
-const discussedFilterButton = document.querySelector('#filter-discussed');
+const filtersImageContainer = document.querySelector('.img-filters');
 
-filtersImageContainer.addEventListener('click', (evt) => {
-  const clickedButton = evt.target;
+const MINIATURES_COUNT = 10;
 
-  buttonCollection.forEach((button) => {
-    button.classList.remove('img-filters__button--active');
-  });
+const Filters = {
+  DEFAULT: 'filter-default',
+  RANDOM: 'filter-random',
+  DISCUSSED: 'filter-discussed',
+};
 
-  if(clickedButton.id === 'filter-default') {
-    defaultFilterButton.classList.add('img-filters__button--active');
-  } else if (clickedButton.id === 'filter-random') {
-    randomFilterButton.classList.add('img-filters__button--active');
-  } else if (clickedButton.id === 'filter-discussed') {
-    discussedFilterButton.classList.add('img-filters__button--active');
+let filterCurrent = Filters.DEFAULT;
+let miniatures = [];
+
+const randomizedSort = () => Math.random() - 0.5;
+
+const mostDiscussedSort = (miniatureA, miniatureB) => miniatureB.comments.length - miniatureA.comments.length;
+
+const getFilteredMiniatures = () => {
+  switch (filterCurrent) {
+    case Filters.RANDOM:
+      return [...miniatures].sort(randomizedSort).slice(0, MINIATURES_COUNT);
+    case Filters.DISCUSSED:
+      return [...miniatures].sort(mostDiscussedSort);
+    default:
+      return [...miniatures];
   }
-});
+};
+
+const onButtonFilterClick = (callback) => {
+  filtersImageContainer.addEventListener('click', (evt) => {
+    if (!evt.target.classList.contains('img-filters__button')) {
+      return;
+    }
+
+    const clickedButton = evt.target;
+
+    if (clickedButton.id === filterCurrent) {
+      return;
+    }
+
+    filtersImageContainer.querySelector('.img-filters__button--active').classList.remove('img-filters__button--active');
+
+    clickedButton.classList.add('img-filters__button--active');
+    filterCurrent = clickedButton.id;
+
+    callback(getFilteredMiniatures());
+  });
+};
+
+const initFilter = (loadedPictures, callback) => {
+  filtersImageContainer.classList.remove('img-filters--inactive');
+  miniatures = [...loadedPictures];
+  onButtonFilterClick(callback);
+};
+
+export { initFilter, getFilteredMiniatures };
+
