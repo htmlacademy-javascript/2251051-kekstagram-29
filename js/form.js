@@ -99,6 +99,7 @@ function closeImageUpload() {
   imageEditField.classList.add('hidden');
   bodySection.classList.remove('modal-open');
   pristine.reset();
+  uploadForm.reset();
   hashtagField.textContent = '';
   descriptionField.textContent = '';
 
@@ -123,7 +124,6 @@ uploadImage.addEventListener('change', () => {
 
 buttonCloseUpload.addEventListener('click', () => {
   closeImageUpload();
-  uploadImage.value = '';
 });
 
 export {setUserFormSubmit, closeImageUpload};
