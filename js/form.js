@@ -1,5 +1,5 @@
 import { bodySection } from './big-picture.js';
-import { imagePreview, sliderContainer } from './picture-filters.js';
+import { effectsList, imagePreview, sliderContainer } from './picture-filters.js';
 import { isEscapeKey } from './util.js';
 
 const uploadForm = document.querySelector('.img-upload__form');
@@ -7,6 +7,7 @@ const uploadImage = document.querySelector('.img-upload__input');
 const imageEditField = document.querySelector('.img-upload__overlay');
 const buttonCloseUpload = document.querySelector('.cancel');
 const submitButton = document.querySelector('.img-upload__submit');
+const effectsPreview = effectsList.querySelectorAll('.effects__preview');
 
 const MAX_HASHTAG_COUNT = 5;
 const VALID_SYMBOLS = /^#[a-zA-Zа-я0-9]{1,19}$/;
@@ -98,6 +99,7 @@ function closeImageUpload() {
   imageEditField.classList.add('hidden');
   bodySection.classList.remove('modal-open');
   pristine.reset();
+  uploadForm.reset();
   hashtagField.textContent = '';
   descriptionField.textContent = '';
 
@@ -114,12 +116,14 @@ uploadImage.addEventListener('change', () => {
 
   if (matches) {
     imagePreview.src = URL.createObjectURL(file);
+    effectsPreview.forEach((preview) => {
+      preview.style.backgroundImage = `url(${imagePreview.src})`;
+    });
   }
 });
 
 buttonCloseUpload.addEventListener('click', () => {
   closeImageUpload();
-  uploadImage.value = '';
 });
 
 export {setUserFormSubmit, closeImageUpload};
