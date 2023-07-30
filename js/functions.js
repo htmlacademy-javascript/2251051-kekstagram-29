@@ -1,9 +1,8 @@
-/* eslint-disable no-undef */
-function checkLength(string, requiredLength) {
+function checkLength (string, requiredLength) {
   return string.length <= requiredLength;
 }
 
-checkLength('строка', 20);
+checkLength('string', 20);
 
 function isPalindrom(string) {
   const normalizedString = string.replaceAll(' ', '').toUpperCase();
@@ -22,9 +21,22 @@ function isPalindrom(string) {
 
 isPalindrom('какая-то строка');
 
-isNumber('функция 2023');
+function isNumber (string) {
+  string = string.toString();
+  let onlyNumbers = '';
 
-function isOutOfTimeLimit(workStart, workEnd, meetingStart, meetingTime) {
+  for (let i = 0; i < string.length; i++) {
+    if(!Number.isNaN(parseInt(string[i], 16))) {
+      onlyNumbers += string[i];
+    }
+  }
+
+  return onlyNumbers;
+}
+
+isNumber ('функция 2023');
+
+function isOutOfTimeLimit (workStart, workEnd, meetingStart, meetingTime) {
 
   const timeStrings = [workStart, workEnd, meetingStart];
 

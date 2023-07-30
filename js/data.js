@@ -23,33 +23,39 @@ const NAMES = [
 ];
 
 const DESCRIPTIONS_COUNT = 25;
+const COMMENTS_ID_COUNT = 1000;
+const COMMENTS_COUNT = 30;
+const PHOTOS_COUNT = 25;
+const AVATARS_COUNT = 6;
+const Likes = {
+  MIN: 25,
+  MAX: 200
+};
 
-// const createRandomIdDescription = getRandomId(1, 25);
+const createRandomIdComment = getRandomId(1, COMMENTS_ID_COUNT);
 
-const createRandomIdComment = getRandomId(1, 1000);
-
-const createRandomPhoto = getRandomId(1, 25);
+const createRandomPhoto = getRandomId(1, PHOTOS_COUNT);
 
 const createComment = () => ({
   id: createRandomIdComment(),
-  avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
+  avatar: `img/avatar-${getRandomInteger(1, AVATARS_COUNT)}.svg`,
   message: getRandomArrayElement(MESSAGE),
   name: getRandomArrayElement(NAMES),
 });
 
 const createRandomComment = () => {
-  const randomCommentCount = getRandomInteger(0, 30);
+  const randomCommentCount = getRandomInteger(0, COMMENTS_COUNT);
   return Array.from({length: randomCommentCount}, createComment);
 };
 
 const createDescription = () => {
-  const createRandomIdDescription = getRandomId(1, 25);
+  const createRandomIdDescription = getRandomId(1, DESCRIPTIONS_COUNT);
 
   return {
     id: createRandomIdDescription(),
     url: `photos/${createRandomPhoto()}.jpg`,
     description: 'Какое-то описание. Сказано придумайте сами... Это типа пофиг какой получается?',
-    likes: getRandomInteger(15, 200),
+    likes: getRandomInteger(Likes.MIN, Likes.MAX),
     comment: createRandomComment(),
   };
 };
